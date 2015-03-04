@@ -1,0 +1,11 @@
+#!/bin/zsh
+declare -r message=$1
+
+declare -r branch_name=`
+    echo "$message"       |
+    sed 's/[^0-9a-zA-Z]/_/g' |
+    sed -e 's/__*/_/g'    |
+    sed -e 's/^_//'       |
+    sed -e 's/_$//'       `-`date '+%y%m%dT%H-%M-%S'`
+
+echo "$branch_name"

@@ -55,12 +55,7 @@ fi
 #
 #  extend-the-foobar-to-handle-stuff
 #
-declare -r branch_name=$(
-    echo "$message"       |
-    sed 's/[^0-9a-zA-Z]/_/g' |
-    sed -e 's/__*/_/g'    |
-    sed -e 's/^_//'       |
-    sed -e 's/_$//'       )-$(date '+%y%m%dT%H-%M-%S')
+declare -r branch_name=$(branchname "$message")
 
 echo "$cmd: Creating new diff with message: $message..."
 
@@ -70,4 +65,4 @@ git checkout -b $branch_name
 git stash apply
 
 git commit -a -m "$message"
-arc diff --nolint --nounit --verbatim --allow-untracked --reviewers $reviewer $remaining_arguments
+arc diff --verbatim --allow-untracked --reviewers $reviewer $remaining_arguments
