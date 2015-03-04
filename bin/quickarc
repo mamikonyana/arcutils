@@ -1,9 +1,11 @@
-#!/bin/bash
+#!/bin/zsh
 
 declare -r cmd=$0
 declare -r message=$1
 declare -r reviewer=$2
 declare -r current_branch="$(git symbolic-ref HEAD 2> /dev/null | cut -d'/' -f3)"
+declare -r all_arguments="$*"
+declare -r remaining_arguments=${all_arguments#*"$2"}
 
 if [ -z "$message" ] ; then
   echo "Send a diff for review of any staged or unstaged changes, and"
@@ -55,11 +57,10 @@ fi
 #
 declare -r branch_name=$(
     echo "$message"       |
-    tr A-Z a-z            |
-    sed -e 's/[^a-z]/-/g' |
-    sed -e 's/--*/-/g'    |
-    sed -e 's/^-//'       |
-    sed -e 's/-$//'       )
+    sed 's/[^0-9a-zA-Z]/_/g' |
+    sed -e 's/__*/_/g'    |
+    sed -e 's/^_//'       |
+    sed -e 's/_$//'       )-$(date '+%y%m%dT%H-%M-%S')
 
 echo "$cmd: Creating new diff with message: $message..."
 
@@ -69,4 +70,4 @@ git checkout -b $branch_name
 git stash apply
 
 git commit -a -m "$message"
-arc diff --nolint --nounit --verbatim --allow-untracked --reviewers $reviewer
+arc diff --nolint --nounit --verbatim --allow-untracked --reviewers $reviewer $remaining_arguments
