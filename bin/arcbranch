@@ -1,0 +1,32 @@
+#!/bin/zsh
+
+declare -r cmd=$0
+declare -r diff_branch=$1
+declare -r message=$2
+declare -r reviewer=$3
+declare -r current_branch="$(git symbolic-ref HEAD 2> /dev/null | cut -d'/' -f3)"
+
+if [ -z "$message" ] ; then
+  echo "Send a diff for review of any staged or unstaged changes, and"
+  echo "creates a branch from the commit message."
+  echo
+  echo "Usage:"
+  echo
+  echo "  $cmd <branch> <message> [<reviewer>]"
+  echo
+  echo "Create or update a Phabricator Differential (code review)."
+  echo
+  echo "To create a new review, be on master with uncommitted"
+  echo "changes in the git repository, and run"
+  echo
+  echo "  $cmd diff_branch_name 'Commit message here' myreviewer"
+  echo
+  echo "To update an existing diff, be on the diff branch and run"
+  echo
+  echo "  $cmd diff_branch_name 'Tweaked comments'"
+  echo
+  echo "which will update the existing diff, adding the supplied message."
+  exit 1
+fi
+
+arcutils_arcwrapper arcbranch $*
