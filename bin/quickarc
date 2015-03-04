@@ -55,7 +55,7 @@ fi
 #
 #  extend-the-foobar-to-handle-stuff
 #
-declare -r branch_name=$(branchname "$message")
+declare -r branch_name=$(arcutils_branchname "$message")
 
 echo "$cmd: Creating new diff with message: $message..."
 
