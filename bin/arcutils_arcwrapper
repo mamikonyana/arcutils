@@ -11,7 +11,7 @@ declare -r remaining_arguments=${all_arguments#*"$3"}
 
 echo "message: $message"
 
-if [ -z "$(git diff HEAD --shortstat)" ] ; then
+if [ -z "$(git diff HEAD --shortstat)" && ! -z "$reviewer" ] ; then
   echo 'ERROR: No changes in working tree; cowardly refusing to continue.'
   exit 1
 fi
